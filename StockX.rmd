@@ -39,6 +39,30 @@ df %>% count(`Brand`) %>% arrange(desc(n))
 #Seeing what size was most popular
 df %>% count(`Shoe Size`) %>% arrange(desc(n))
 ```
+```{r}
+#Average price of the shoes by sneaker
+avg <- aggregate(df$`Sale Price`, by=list(df$`Sneaker Name`), FUN=mean) 
+avg <- avg[order(avg$x, decreasing=T),]
+avg
+```
+```{r}
+#Average price of the shoes by brand
+avg <- aggregate(df$`Sale Price`, by=list(df$Brand), FUN=mean) 
+avg <- avg[order(avg$x, decreasing=T),]
+avg
+```
+```{r}
+#Average price of the shoes by sneaker and state
+avg <- aggregate(df$`Sale Price`, by=list(df$`Sneaker Name`, df$`Buyer Region`), FUN=mean) 
+avg <- avg[order(avg$x, decreasing=T),]
+avg
+```
+```{r}
+#Average price of the shoes by brand and state
+avg <- aggregate(df$`Sale Price`, by=list(df$Brand, df$`Buyer Region`), FUN=mean) 
+avg <- avg[order(avg$x, decreasing=T),]
+avg
+```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
