@@ -9,7 +9,7 @@ Try executing this chunk by clicking the *Run* button within the chunk or by pla
 
 ```{r}
 library(readxl)
-df <- read_excel("C:/Users/madat/Projects/StockX Data/StockX-Data-Contest-2019-3.xlsx")
+df <- read_excel("C:/Users/madat/Projects/StockX/StockX-Data-Contest-2019-3.xlsx")
 View(df)
 ```
 
@@ -19,7 +19,16 @@ df$Brand<-as.factor(df$Brand)
 df$`Sneaker Name`<- as.factor(df$`Sneaker Name`)
 df$`Buyer Region` <- as.factor(df$`Buyer Region`)
 df$`Shoe Size` <- as.factor(df$`Shoe Size`)
+#df$`Sale Price`<- as.Date(as.character(df$`Sale Price`), format="%Y/%m/%d")
+#df$`Release Date` <- as.Date(as.character(df$`Release Date`), format="%Y/%m/%d")
+df$date_diff <- as.double(difftime((df$`Order Date`), (df$`Release Date`), units = "days")/365)
 str(df)
+```
+
+```{r}
+#creating a value add variable
+df$valAdd <- df$`Sale Price` - df$`Retail Price`
+df$avgGains <- ((df$valAdd/df$`Retail Price`) * 100) / (df$date_diff)
 ```
 
 ```{r}
@@ -52,11 +61,44 @@ avg <- avg[order(avg$x, decreasing=T),]
 avg
 ```
 ```{r}
-#Average price of the shoes by sneaker and state
-avg <- aggregate(df$`Sale Price`, by=list(df$`Sneaker Name`, df$`Buyer Region`), FUN=mean) 
+#Average value added by sneaker
+avg <- aggregate(df$valAdd, by=list(df$`Sneaker Name`), FUN=mean) 
 avg <- avg[order(avg$x, decreasing=T),]
 avg
 ```
+
+```{r}
+#Average value added by brand
+avg <- aggregate(df$valAdd, by=list(df$Brand), FUN=mean) 
+avg <- avg[order(avg$x, decreasing=T),]
+avg
+```
+```{r}
+#Average percent gained by sneaker
+avg <- aggregate(df$gains, by=list(df$`Sneaker Name`), FUN=mean) 
+avg <- avg[order(avg$x, decreasing=T),]
+avg
+```
+```{r}
+#Average percent gained by brand 
+avg <- aggregate(df$gains, by=list(df$Brand), FUN=mean) 
+avg <- avg[order(avg$x, decreasing=T),]
+avg
+```
+```{r}
+#Average percent gained by brand 
+avg <- aggregate(df$gains, by=list(df$Brand, df$`Buyer Region`), FUN=mean) 
+avg <- avg[order(avg$x, decreasing=T),]
+avg
+```
+
+```{r}
+#Average price of the shoes by sneaker and state
+avg <- aggregate(df$gains, by=list(df$`Sneaker Name`, df$`Buyer Region`), FUN=mean) 
+avg <- avg[order(avg$x, decreasing=T),]
+avg
+```
+
 ```{r}
 #Average price of the shoes by brand and state
 avg <- aggregate(df$`Sale Price`, by=list(df$Brand, df$`Buyer Region`), FUN=mean) 
