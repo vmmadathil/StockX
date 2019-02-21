@@ -19,9 +19,11 @@ df$Brand<-as.factor(df$Brand)
 df$`Sneaker Name`<- as.factor(df$`Sneaker Name`)
 df$`Buyer Region` <- as.factor(df$`Buyer Region`)
 df$`Shoe Size` <- as.factor(df$`Shoe Size`)
-#df$`Sale Price`<- as.Date(as.character(df$`Sale Price`), format="%Y/%m/%d")
-#df$`Release Date` <- as.Date(as.character(df$`Release Date`), format="%Y/%m/%d")
 df$date_diff <- as.double(difftime((df$`Order Date`), (df$`Release Date`), units = "days")/365)
+#If the shoe is pre-released, make sure the difference is positive 
+df$date_diff <- ifelse(df$date_diff > 0, df$date_diff, -(df$date_diff))
+#If bought on the same day, make the difference equal to one year to smooth calculations
+#df$date_diff <- ifelse(df$date_diff == 0, 1, (df$date_diff))
 str(df)
 ```
 
@@ -75,26 +77,26 @@ avg
 ```
 ```{r}
 #Average percent gained by sneaker
-avg <- aggregate(df$gains, by=list(df$`Sneaker Name`), FUN=mean) 
+avg <- aggregate(df$avgGains, by=list(df$`Sneaker Name`), FUN=mean) 
 avg <- avg[order(avg$x, decreasing=T),]
 avg
 ```
 ```{r}
 #Average percent gained by brand 
-avg <- aggregate(df$gains, by=list(df$Brand), FUN=mean) 
+avg <- aggregate(df$avgGains, by=list(df$Brand), FUN=mean) 
 avg <- avg[order(avg$x, decreasing=T),]
 avg
 ```
 ```{r}
-#Average percent gained by brand 
-avg <- aggregate(df$gains, by=list(df$Brand, df$`Buyer Region`), FUN=mean) 
+#Average percent gained by brand by state
+avg <- aggregate(df$avgGains, by=list(df$Brand, df$`Buyer Region`), FUN=mean) 
 avg <- avg[order(avg$x, decreasing=T),]
 avg
 ```
 
 ```{r}
 #Average price of the shoes by sneaker and state
-avg <- aggregate(df$gains, by=list(df$`Sneaker Name`, df$`Buyer Region`), FUN=mean) 
+avg <- aggregate(df$avgGains, by=list(df$`Sneaker Name`, df$`Buyer Region`), FUN=mean) 
 avg <- avg[order(avg$x, decreasing=T),]
 avg
 ```
@@ -102,6 +104,25 @@ avg
 ```{r}
 #Average price of the shoes by brand and state
 avg <- aggregate(df$`Sale Price`, by=list(df$Brand, df$`Buyer Region`), FUN=mean) 
+avg <- avg[order(avg$x, decreasing=T),]
+avg
+```
+```{r}
+#Average price of the shoes by brand and state
+avg <- aggregate(df$valAdd, by=list(df$Brand, df$`Buyer Region`), FUN=mean) 
+avg <- avg[order(avg$x, decreasing=T),]
+avg
+```
+
+```{r}
+#Average yearly gain by state
+avg <- aggregate(df$avgGains, by=list(df$`Buyer Region`), FUN=mean) 
+avg <- avg[order(avg$x, decreasing=T),]
+avg
+```
+```{r}
+#which shoes were the slowest selling?
+avg <- aggregate(df$date_diff, by=list(df$`Sneaker Name`), FUN=mean) 
 avg <- avg[order(avg$x, decreasing=T),]
 avg
 ```
