@@ -155,6 +155,26 @@ ggplot(data = dft[dft$Brand == "Yeezy", ], aes(x=Sale.Price, y=Kanye.West...Unit
 
 #+ geom_line(dara, aes(x=Order.Date, y=Kanye.West...United.States.), color = "red") + geom_line(dft, aes(x = Order.Date, y=))
 ```
+```{r}
+dfAvg <- aggregate(dft$Sale.Price, by=list(dft$Order.Date, dft$Brand), FUN=mean)
+```
+
+```{r}
+ggplot(data = dfAvg[dfAvg$Group.2 == "Yeezy", ], aes(x=Group.1, y=x)) + geom_line()
+```
+```{r}
+ggplot(data = dft, aes(x=Order.Date, y=Kanye.West...United.States.)) + geom_line(color="orange") + geom_line(data = dft, aes(x=Order.Date, y=Drake...United.States.), color="blue") + xlab(label = "Date") + ylab(label = "Frequency of Trends")
+```
+```{r}
+ggplot(data = dft, aes(x=Order.Date, y=Drake...United.States.)) + geom_line() + xlab(label = "Date") + ylab(label = "Drake")
+```
+
+```{r}
+ggplot(dfAvg, aes(x=Group.1, y=x, color = Group.2)) + geom_line() + ylab(label="Average Daily Sale Price") + 
+  xlab("Order Date") + 
+  scale_colour_manual(values=c("green", "blue")) + labs(color='Brand') 
+```
+
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
