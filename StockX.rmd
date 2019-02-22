@@ -138,7 +138,22 @@ gt$Week <- as.POSIXct(gt$Week, format = "%m/%d/%Y")
 str(gt)
 ```
 ```{r}
-write.csv(df, "C:/Users/madat/Projects/StockX/shoes0.csv")
+write.csv(df, "C:/Users/madat/Projects/StockX/shoes.csv")
+```
+
+```{r}
+dft <- read.csv("C:/Users/madat/Projects/StockX/shoe-trends.csv")
+View(dft)
+```
+```{r}
+dft$Order.Date <- as.POSIXct(dft$Order.Date, format = "%m/%d/%Y")
+str(dft)
+```
+```{r}
+library(ggplot2)
+ggplot(data = dft[dft$Brand == "Yeezy", ], aes(x=Sale.Price, y=Kanye.West...United.States.)) + geom_point()
+
+#+ geom_line(dara, aes(x=Order.Date, y=Kanye.West...United.States.), color = "red") + geom_line(dft, aes(x = Order.Date, y=))
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
