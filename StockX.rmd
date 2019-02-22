@@ -133,6 +133,10 @@ lin <- lm(`Sale Price` ~ `Shoe Size` + Brand, data = df)
 summary(lin)
 ```
 ```{r}
+)
+```
+
+```{r}
 gt <- read.csv("C:/Users/madat/Projects/StockX/gtrends.csv")
 gt$Week <- as.POSIXct(gt$Week, format = "%m/%d/%Y")
 str(gt)
@@ -174,7 +178,34 @@ ggplot(dfAvg, aes(x=Group.1, y=x, color = Group.2)) + geom_line() + ylab(label="
   xlab("Order Date") + 
   scale_colour_manual(values=c("green", "blue")) + labs(color='Brand') 
 ```
+```{r}
+dft$count <- 1
+```
 
+```{r}
+shoeSold <- aggregate(dft$count, by=list(dft$Brand, dft$Order.Date), FUN=sum)
+```
+
+```{r}
+library(ggplot2)
+ggplot(shoeSold, aes(x=Date, y=UnitSold, color=Brand)) + geom_line()
+```
+```{r}
+#Rename column names
+colnames(dfAvg) <- c("Date", "Brand", "AvgPrice")
+colnames(shoeSold) <- c("Brand", "Date", "UnitSold")
+```
+
+```{r}
+#Merging two columns
+allAvg <- merge(dfAvg, shoeSold, by=c("Date", "Brand"))
+```
+
+```{r}
+library(dplyr)
+dat <- select(dft, `Order.Date`, `Drake...United.States.`, `Kanye.West...United.States.`, `Adidas.Yeezy...United.States.`, `Off.White...United.States.`)
+
+```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
