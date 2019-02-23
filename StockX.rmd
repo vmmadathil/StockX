@@ -265,21 +265,21 @@ str(sms)
 sms$sum[sms$sum == 0] <- NA
 
 y <- ggplot(sms[sms$Brand=="Off-White", ], aes(x=Date))
- y <- y + geom_line(aes(y=UnitSold), color ="red")  + geom_line(aes(y=sum*2), color="blue", size = 1.05)
-  y <- y + scale_y_continuous(sec.axis = sec_axis(~.*.2, name = "Google Trend Index"))
+ y <- y + geom_line(aes(y=UnitSold), color ="red")  + geom_line(aes(y=sum*2.5), color="blue", size = 1.05)
+  y <- y + scale_y_continuous(sec.axis = sec_axis(~.*.4, name = "Google Trend Index"))
     y <- y + labs(y = "Units Sold",
                 x = "Date",
-                colour = "Parameter")
+                colour = "Parameter") + ggtitle("Off-White x Nike Units Sold & Sicko Mode Trends vs Time" )
  y
 ```
 ```{r}
 z <- ggplot(sms[sms$Brand=="Yeezy", ], aes(x=Date))
- z <- z + geom_line(aes(y=UnitSold), color ="red")  + geom_line(aes(y=sum*5), color="blue", size = 1.05)
-  z <- z + scale_y_continuous(sec.axis = sec_axis(~.*.2, name = "Google Trend Index"))
+ z <- z + geom_line(aes(y=UnitSold), color ="red")  + geom_line(aes(y=sum*8), color="blue", size = 1.05)
+  z <- z + scale_y_continuous(sec.axis = sec_axis(~.*.125, name = "Google Trend Index"))
     z <- z + labs(y = "Units Sold",
                 x = "Date",
                 colour = "Parameter")
-      z <- z +  scale_color_discrete(name = "Y series", labels = c("Y2", "Y1"))
+      z <- z + ggtitle("Yeezy Units Sold & Sicko Mode Trends vs Time" )
  z
 ```
 
