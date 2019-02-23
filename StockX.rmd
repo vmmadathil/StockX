@@ -204,8 +204,32 @@ allAvg <- merge(dfAvg, shoeSold, by=c("Date", "Brand"))
 ```{r}
 library(dplyr)
 dat <- select(dft, `Order.Date`, `Drake...United.States.`, `Kanye.West...United.States.`, `Adidas.Yeezy...United.States.`, `Off.White...United.States.`)
-
+dat <- dat[!duplicated(dat$Order.Date),]
 ```
+
+```{r}
+colnames(dat) <- c("Date", "DrakeT", "KanyeT", "YeezyT", "OffWhiteT")
+allAvg <- merge(allAvg, dat, by=c("Date")) 
+```
+
+```{r}
+p <- ggplot(allAvg, aes(x=Date))
+  p <- p + geom_line(aes(y=AvgPrice, color = Brand))
+p
+```
+```{r}
+p <- p + geom_line(aes(y=DrakeT * 15), color = "gold")
+p
+```
+```{r}
+p <- p + geom_line(aes(y=KanyeT * 15), color = "black")
+p
+```
+```{r}
+q <- ggplot(allAvg[allAvg$Brand == "Yeezy",], aes(x=Date))
+  q <- q + geom_line(aes(y=AvgPrice))
+```
+
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
