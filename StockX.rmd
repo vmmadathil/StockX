@@ -132,10 +132,7 @@ avg
 lin <- lm(`Sale Price` ~ `Shoe Size` + Brand, data = df)
 summary(lin)
 ```
-```{r}
-)
-```
-
+  
 ```{r}
 gt <- read.csv("C:/Users/madat/Projects/StockX/gtrends.csv")
 gt$Week <- as.POSIXct(gt$Week, format = "%m/%d/%Y")
@@ -228,8 +225,63 @@ p
 ```{r}
 q <- ggplot(allAvg[allAvg$Brand == "Yeezy",], aes(x=Date))
   q <- q + geom_line(aes(y=AvgPrice))
+q
+```
+```{r}
+q <- q + geom_line(aes(y=KanyeT * 10), color = "blue")
+q
 ```
 
+```{r}
+t <- ggplot(allAvg, aes(x=Date))
+  t <- t + geom_line(aes(y=UnitSold, color = Brand))
+t
+```
+```{r}
+t <- t + geom_line(aes(y=DrakeT * 10), color = "gold") + geom_line(aes(y=KanyeT * 10), color = "black")
+t
+```
+```{r}
+t <- ggplot(allAvg, aes(x=Date))
+  t <- t + geom_line(aes(y=UnitSold, color = Brand))
+  t <- t + geom_line(aes(y=AvgPrice, color = Brand))
+t
+```
+```{r}
+write.csv(allAvg, "allAvg.csv")
+
+```
+
+```{r}
+sms <- read.csv("avgSicko.csv")
+str(sms)
+```
+
+```{r}
+sms$Date <- as.POSIXct(sms$Date, format = "%Y-%m-%d")
+str(sms)
+```
+```{r}
+sms$sum[sms$sum == 0] <- NA
+
+y <- ggplot(sms[sms$Brand=="Off-White", ], aes(x=Date))
+ y <- y + geom_line(aes(y=UnitSold), color ="red")  + geom_line(aes(y=sum*2), color="blue", size = 1.05)
+  y <- y + scale_y_continuous(sec.axis = sec_axis(~.*.2, name = "Google Trend Index"))
+    y <- y + labs(y = "Units Sold",
+                x = "Date",
+                colour = "Parameter")
+ y
+```
+```{r}
+z <- ggplot(sms[sms$Brand=="Yeezy", ], aes(x=Date))
+ z <- z + geom_line(aes(y=UnitSold), color ="red")  + geom_line(aes(y=sum*5), color="blue", size = 1.05)
+  z <- z + scale_y_continuous(sec.axis = sec_axis(~.*.2, name = "Google Trend Index"))
+    z <- z + labs(y = "Units Sold",
+                x = "Date",
+                colour = "Parameter")
+      z <- z +  scale_color_discrete(name = "Y series", labels = c("Y2", "Y1"))
+ z
+```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
